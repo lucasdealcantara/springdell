@@ -17,32 +17,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.residencia.dell.entities.Orders;
+import com.residencia.dell.services.EmailService;
 import com.residencia.dell.services.OrderService;
 import com.residencia.dell.vo.NotaFiscalVO;
 import com.residencia.dell.vo.OrdersVO;
 
-/**
- *
- * @author Dayane
- */
 @RestController
 @RequestMapping("/orders")
 public class OrdersController {
 
+	@Autowired
+	private EmailService emailService;
+	
 	@Autowired
 	private OrderService orderService;
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Orders> findById(@PathVariable Integer id) {
 		HttpHeaders headers = new HttpHeaders();
+	
 		return new ResponseEntity<>(orderService.findById(id), headers, HttpStatus.OK);
 	}
 	
-	@GetMapping("/emitirnotafiscal/{id}")
-	public ResponseEntity<NotaFiscalVO> emitirNF(@PathVariable Integer id) {
-		HttpHeaders headers = new HttpHeaders();
-		return new ResponseEntity<>(orderService.emitirNF(id), headers, HttpStatus.OK);
-	}
+	
+	@GetMapping("/notafiscal/{id}")
+	public ResponseEntity<NotaFiscalVO> emitirNF(@PathVariable Integer id) throws Exception {
+	HttpHeaders headers = new HttpHeaders();
+	emailService.emailNotaFiscal(orderService.emitirNF(id));
+	return new ResponseEntity<>(orderService.emitirNF(id), headers, HttpStatus.OK);
+		}
+		
+	
+
+	
 	@GetMapping
 	public ResponseEntity<List<Orders>> findAll(
 			@RequestParam(required = false) Integer pagina,
