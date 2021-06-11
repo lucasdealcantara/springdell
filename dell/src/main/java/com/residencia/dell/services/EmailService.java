@@ -68,7 +68,7 @@ public class EmailService {
 
 		try {
 			helper.setFrom(emailRemetente);
-			helper.setTo("charlestheobald1@gmail.com");
+			helper.setTo("xnagiza@gmail.com");
 			helper.setSubject("Nota Fiscal Nº " + emailVO.getOrderId());
 
 			SimpleDateFormat sdfData = new SimpleDateFormat("dd/MM/yyyy");
